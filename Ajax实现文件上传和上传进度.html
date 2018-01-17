@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="http://code.jquery.com/jquery-2.1.1.min.js"></script>
+</head>
+<body>
+<form id="form" action="#">
+    <input type="file" id="file">
+</form>
+<progress id="J_upload_progress" value="22" max="100"></progress>
+<script>
+    window.onload =function (ev) {
+        document.getElementById('form').addEventListener('change', function (ev2) {
+            var formData = new FormData();
+            formData.append("file", document.getElementById('file').files[0]);
+            formData.append("token", token_value); // 其他参数按这样子加入
+
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'uploadHandler.php');
+            // 上传完成后的回调函数
+            xhr.onload = function () {
+                if (xhr.status === 200) {
+                    console.log('上传成功');
+                } else {
+                    console.log('上传出错');
+                }
+            };
+            // 获取上传进度
+            xhr.upload.onprogress = function (event) {
+                if (event.lengthComputable) {
+                    var percent = Math.floor(event.loaded / event.total * 100) ;
+                    // 设置进度显示
+                    document.getElementById('J_upload_progress').setAttribute('value',percent+'');
+                }
+            };
+            xhr.send(formData);
+
+        })
+    }
+
+</script>
+</body>
+</html>
