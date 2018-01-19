@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.js"></script>
+    <title>Document</title>
+</head>
+<body>
+<form>
+    <input type="file" id="avatar" name="avatar" multiple>
+    <button id="btn" type="button">保存</button>
+</form>
+<script>
+    $('#btn').on('click',function () {
+        var $input = $('#avatar');
+        var files = $input.prop('files');
+        console.log(files);
+
+        var data =  new FormData();
+
+        // --> 参数:上传字段,上传内容
+        data.append('avatar',files[0]);
+
+        $.ajax({
+            url:'uploadHandler.php',
+            type:"post",
+            data:data,
+            cache:false,  // --> IE8会缓存之前的GET结果来响应POST请求。 这里设置cache: false是为了兼容IE8。
+            processData:false, // --> jQuery中content-type默认值为application/x-www-form-urlencoded， 因此传给data参数的对象会默认被转换为query string, 因此设置contentType: false来禁止jQuery的转换操作
+            contentType:false,  // --> 设置contentType: false后该转换会失败，因此设置processData: false来禁止该转换过程。
+            success:function (result) {
+                console.log(result);
+            }
+        })
+    })
+</script>
+</body>
+</html>
